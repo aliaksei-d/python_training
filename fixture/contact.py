@@ -6,8 +6,13 @@ class ContactHelper:
     def __init__(self, app):
         self.app = app
 
+    def open_add_contact_page(self):
+        wd = self.app.wd
+        wd.find_element_by_link_text("add new").click()
+
     def create(self, contact):
         wd = self.app.wd
+        self.open_add_contact_page()
         # fill contact form
         wd.find_element_by_name("firstname").click()
         wd.find_element_by_name("firstname").clear()
@@ -69,3 +74,19 @@ class ContactHelper:
         wd.find_element_by_name("notes").send_keys(contact.notes)
         # submit contact creation
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
+
+    def delete_first_contact(self):
+        wd = self.app.wd
+        # select first contact
+        wd.find_element_by_name("selected[]").click()
+        # confirm Delete action
+        self.accept_next_alert = True
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+        wd.switch_to_alert().accept()
+
+    def edit_first_contact(self):
+        wd = self.app.wd
+        # click edit button
+        wd.find_element_by_xpath("//*[@id='maintable']/tbody/tr[2]/td[8]/a/img").click()
+        # confirm edit action
+        wd.find_element_by_name("update").click()

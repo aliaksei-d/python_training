@@ -5,7 +5,6 @@ from fixture.application import Application
 
 
 def test_add_contact(app):
-    app.open_home_page()
     app.session.login(username="admin", password="secret")
     app.contact.create(Contact(firstname="firstName", middlename="middleName", lastname="lastName", nickname="nickName", title="titleTest", company="companyTest",
                                address="addressTest", home="homeTest", mobile="mobileTest", work="workTest", fax="faxTest", email="emailTest", email2="emailTest2",
