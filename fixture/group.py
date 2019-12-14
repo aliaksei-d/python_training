@@ -16,6 +16,7 @@ class GroupHelper:
         # submit group creation
         wd.find_element_by_name("submit").click()
         self.return_to_groups_page()
+        self.implicitly_wait(1)
 
     def fill_group_form(self, group):
         wd = self.app.wd
@@ -45,6 +46,7 @@ class GroupHelper:
         # submit deletion
         wd.find_element_by_name("delete").click()
         self.return_to_groups_page()
+        self.implicitly_wait(1)
 
     def modify_first_group(self, new_group_data):
         wd = self.app.wd
@@ -57,3 +59,7 @@ class GroupHelper:
         # submit edit action
         wd.find_element_by_name("update").click()
         self.return_to_groups_page()
+        self.implicitly_wait(1)
+
+    def implicitly_wait(self, param):
+        pass
