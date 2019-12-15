@@ -9,6 +9,6 @@ def test_add_contact(app):
                                address="addressTest", home="homeTest", mobile="mobileTest", work="workTest", fax="faxTest", email="emailTest", email2="emailTest2",
                                email3="emailTest3", homepage="homePage", bday="12", bmonth="June", byear="1995", aday="15", amonth="October", ayear="2010", address2="secondaryAddress",
                                phone2="secondaryHome", notes="notesTest"))
-    app.return_to_home_page()
+#    app.return_to_home_page()
 
 

@@ -17,6 +17,7 @@ class ContactHelper:
         self.fill_contact_form(contact)
         # submit contact creation
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
+        self.return_to_home_page()
         self.implicitly_wait(1)
 
     def fill_contact_form(self, contact):
@@ -71,8 +72,8 @@ class ContactHelper:
         self.accept_next_alert = True
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
-
-        self.implicitly_wait(1)
+        self.return_to_home_page()
+        self.implicitly_wait(2)
 
     def modify_first_contact(self, new_contact_data):
         wd = self.app.wd
@@ -83,12 +84,17 @@ class ContactHelper:
         self.fill_contact_form(new_contact_data)
         # submit modification
         wd.find_element_by_name("update").click()
-        self.implicitly_wait(1)
+        self.return_to_home_page()
+        self.implicitly_wait(2)
 
     def open_home_page(self):
         wd = self.app.wd
+        if not wd.current_url.endswith("/index.php"):
+            wd.find_element_by_link_text("home").click()
+
+    def return_to_home_page(self):
+        wd = self.app.wd
         wd.find_element_by_link_text("home").click()
-        self.implicitly_wait(1)
 
     def count(self):
         wd = self.app.wd
