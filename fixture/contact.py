@@ -9,6 +9,7 @@ class ContactHelper:
     def open_add_contact_page(self):
         wd = self.app.wd
         wd.find_element_by_link_text("add new").click()
+        self.implicitly_wait(1)
 
     def create(self, contact):
         wd = self.app.wd
@@ -16,6 +17,7 @@ class ContactHelper:
         self.fill_contact_form(contact)
         # submit contact creation
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
+        self.implicitly_wait(1)
 
     def fill_contact_form(self, contact):
         wd = self.app.wd
@@ -43,6 +45,7 @@ class ContactHelper:
         self.change_field_value("address2", contact.address2)
         self.change_field_value("phone2", contact.phone2)
         self.change_field_value("notes", contact.notes)
+        self.implicitly_wait(1)
 
     def change_field_value(self, field_name, text):
         wd = self.app.wd
@@ -60,18 +63,30 @@ class ContactHelper:
 
     def delete_first_contact(self):
         wd = self.app.wd
+        self.open_home_page()
         # select first contact
         wd.find_element_by_name("selected[]").click()
+        self.implicitly_wait(1)
         # confirm Delete action
         self.accept_next_alert = True
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
+        self.implicitly_wait(1)
 
     def modify_first_contact(self, new_contact_data):
         wd = self.app.wd
+        self.open_home_page()
         # open modification form
         wd.find_element_by_xpath("//*[@id='maintable']/tbody/tr[2]/td[8]/a/img").click()
         # fill contact form
         self.fill_contact_form(new_contact_data)
         # submit modification
         wd.find_element_by_name("update").click()
+        self.implicitly_wait(1)
+
+    def open_home_page(self):
+        wd = self.app.wd
+        wd.find_element_by_link_text("home").click()
+
+    def implicitly_wait(self, param):
+        pass
