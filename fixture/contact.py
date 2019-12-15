@@ -71,6 +71,7 @@ class ContactHelper:
         self.accept_next_alert = True
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
+
         self.implicitly_wait(1)
 
     def modify_first_contact(self, new_contact_data):
@@ -87,6 +88,12 @@ class ContactHelper:
     def open_home_page(self):
         wd = self.app.wd
         wd.find_element_by_link_text("home").click()
+        self.implicitly_wait(1)
+
+    def count(self):
+        wd = self.app.wd
+        self.open_home_page()
+        return len(wd.find_elements_by_name("selected[]"))
 
     def implicitly_wait(self, param):
         pass

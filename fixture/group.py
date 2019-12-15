@@ -62,5 +62,10 @@ class GroupHelper:
         self.return_to_groups_page()
         self.implicitly_wait(1)
 
+    def count(self):
+        wd = self.app.wd
+        self.open_groups_page()
+        return len(wd.find_elements_by_name("selected[]"))
+
     def implicitly_wait(self, param):
         pass
