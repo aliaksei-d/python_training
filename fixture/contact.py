@@ -112,10 +112,12 @@ class ContactHelper:
             self.open_home_page()
             self.contact_cache = []
             for element in wd.find_elements_by_css_selector("tr[name=entry]"):
-                text = element.text
                 id = element.find_element_by_name("selected[]").get_attribute("value")
-                self.contact_cache.append(Contact(firstname=text, lastname=text, id=id))
-        return list(self.contact_cache)
+                cell = element.find_elements_by_css_selector("td")
+                firstname = cell[2].text
+                lastname = cell[1].text
+                self.contact_cache.append(Contact(lastname=lastname, firstname=firstname, id=int(id)))
+            return list(self.contact_cache)
 
     def implicitly_wait(self, param):
         pass
