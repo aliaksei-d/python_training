@@ -27,6 +27,7 @@ class GroupHelper:
         self.change_field_value("group_name", group.name)
         self.change_field_value("group_header", group.header)
         self.change_field_value("group_footer", group.footer)
+        self.implicitly_wait(1)
 
     def change_field_value(self, field_name, text):
         wd = self.app.wd
@@ -38,7 +39,7 @@ class GroupHelper:
     def return_to_groups_page(self):
         wd = self.app.wd
         wd.find_element_by_link_text("group page").click()
-        self.implicitly_wait(3)
+        self.implicitly_wait(1)
 
     def select_first_group(self):
         wd = self.app.wd
@@ -47,6 +48,7 @@ class GroupHelper:
     def select_group_by_index(self, index):
         wd = self.app.wd
         wd.find_elements_by_name("selected[]")[index].click()
+        self.implicitly_wait(1)
 
     def delete_first_group(self, index):
         wd = self.app.wd

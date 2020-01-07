@@ -8,8 +8,9 @@ class ContactHelper:
 
     def open_add_contact_page(self):
         wd = self.app.wd
-        wd.find_element_by_link_text("add new").click()
-        self.implicitly_wait(1)
+        if not wd.current_url.endswith("addressbook/edit.php"):
+            wd.find_element_by_link_text("add new").click()
+            self.implicitly_wait(1)
 
     def create(self, contact):
         wd = self.app.wd
@@ -30,9 +31,9 @@ class ContactHelper:
         self.change_field_value("title", contact.title)
         self.change_field_value("company", contact.company)
         self.change_field_value("address", contact.address)
-        self.change_field_value("home", contact.home)
-        self.change_field_value("mobile", contact.mobile)
-        self.change_field_value("work", contact.work)
+        self.change_field_value("home", contact.homephone)
+        self.change_field_value("mobile", contact.mobilephone)
+        self.change_field_value("work", contact.workphone)
         self.change_field_value("fax", contact.fax)
         self.change_field_value("email", contact.email)
         self.change_field_value("email2", contact.email2)
@@ -45,7 +46,7 @@ class ContactHelper:
         self.select_dropdown_value("amonth", contact.amonth)
         self.change_field_value("ayear", contact.ayear)
         self.change_field_value("address2", contact.address2)
-        self.change_field_value("phone2", contact.phone2)
+        self.change_field_value("phone2", contact.secondaryphone)
         self.change_field_value("notes", contact.notes)
         self.implicitly_wait(1)
 
@@ -100,12 +101,14 @@ class ContactHelper:
 
     def open_home_page(self):
         wd = self.app.wd
-        if not wd.current_url.endswith("/addressbook"):
+        if not wd.current_url.endswith("addressbook/index.php"):
             wd.find_element_by_link_text("home").click()
+            self.implicitly_wait(1)
 
     def return_to_home_page(self):
         wd = self.app.wd
         wd.find_element_by_link_text("home").click()
+        self.implicitly_wait(1)
 
     def count(self):
         wd = self.app.wd
@@ -120,12 +123,42 @@ class ContactHelper:
             self.open_home_page()
             self.contact_cache = []
             for element in wd.find_elements_by_css_selector("tr[name=entry]"):
-                id = element.find_element_by_name("selected[]").get_attribute("value")
                 cell = element.find_elements_by_css_selector("td")
                 firstname = cell[2].text
                 lastname = cell[1].text
-                self.contact_cache.append(Contact(lastname=lastname, firstname=firstname, id=int(id)))
-            return list(self.contact_cache)
+                id = cell[0].find_element_by_tag_name("input").get_attribute("value")
+                all_phones = cell[5].text.splitlines()
+                self.contact_cache.append(Contact(lastname=lastname, firstname=firstname, id=id,
+                                                  homephone=all_phones[0], mobilephone=all_phones[1],
+                                                  workphone=all_phones[2], secondaryphone=all_phones[3]))
+        return list(self.contact_cache)
+
+    def open_contact_to_edit_by_index(self, index):
+        wd = self.app.wd
+        self.open_home_page()
+        row = wd.find_element_by_name("entry")[index]
+        cell = row.find_elements_by_tag_name("td")[7]
+        cell.find_element_by_tag_name("a").click()
+
+    def open_contact_view_by_index(self, index):
+        wd = self.app.wd
+        self.open_home_page()
+        row = wd.find_element_by_name("entry")[index]
+        cell = row.find_elements_by_tag_name("td")[6]
+        cell.find_element_by_tag_name("a").click()
+
+    def get_contact_info_from_edit_page(self, index):
+        wd = self.app.wd
+        self.open_contact_to_edit_by_index(index)
+        firstname = wd.find_element_by_name("firstname").get_attribute("value")
+        lastname = wd.find_element_by_name("lastname").get_attribute("value")
+        id = wd.find_element_by_name("id").get_attribute("value")
+        homephone = wd.find_element_by_name("home").get_attribute("value")
+        workphone = wd.find_element_by_name("work").get_attribute("value")
+        mobilephone = wd.find_element_by_name("mobile").get_attribute("value")
+        secondaryphone = wd.find_element_by_name("phone2").get_attribute("value")
+        return Contact(firstname=firstname, lastname=lastname, id=id, homephone=homephone, workphone=workphone,
+                       mobilephone=mobilephone, secondaryphone=secondaryphone)
 
     def implicitly_wait(self, param):
         pass
