@@ -9,8 +9,8 @@ from fixture.application import Application
 def test_add_contact(app):
     old_contacts = app.contact.get_contact_list()
     contact = Contact(firstname="firstName", middlename="middleName", lastname="lastName", nickname="nickName",
-                       title="titleTest", company="companyTest", address="addressTest", homephone="home_phone123",
-                      mobilephone="mobile_phone456", workphone="work_phone789",
+                       title="titleTest", company="companyTest", address="addressTest", homephone="homephone123",
+                      mobilephone="mobilephone456", workphone="workphone789",
                       fax="faxTest", email="emailTest", email2="emailTest2", email3="emailTest3",
                       homepage="homePage", bday="12", bmonth="June", byear="1995", aday="15", amonth="October",
                       ayear="2010", address2="secondaryAddress", secondaryphone="secondary1234", notes="notesTest")
