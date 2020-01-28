@@ -1,20 +1,21 @@
 import re
+from model.contact import Contact
 
 
-def test_data_on_home_page(app):
-    contact_from_home_page = app.contact.get_contact_list()[0]
-    contact_from_edit_page = app.contact.get_contact_info_from_edit_page(0)
-    assert contact_from_home_page.all_phones_from_home_page == merge_phones_like_on_home_page(contact_from_edit_page)
-    assert contact_from_home_page.all_emails_from_home_page == merge_emails_like_on_home_page(contact_from_edit_page)
-
-
-def test_data_on_contact_view_page(app):
-    contact_from_view_page = app.contact.get_contact_from_view_page(0)
-    contact_from_edit_page = app.contact.get_contact_info_from_edit_page(0)
-    assert contact_from_view_page.homephone == contact_from_edit_page.homephone
-    assert contact_from_view_page.workphone == contact_from_edit_page.workphone
-    assert contact_from_view_page.mobilephone == contact_from_edit_page.mobilephone
-    assert contact_from_view_page.secondaryphone == contact_from_edit_page.secondaryphone
+def test_data_on_home_page(app, db):
+    contacts_from_home_page = sorted(app.contact.get_contact_list(), key=Contact.id_or_max)
+    contacts_from_db = sorted(db.get_contact_list(), key=Contact.id_or_max)
+    index=0
+    while index <= len(contacts_from_home_page):
+        assert contacts_from_db[index] == contacts_from_db[index]
+        assert contacts_from_home_page[index].firstname == contacts_from_db[index].firstname
+        assert contacts_from_home_page[index].lastname == contacts_from_db[index].lastname
+        assert contacts_from_home_page[index].address == contacts_from_db[index].address
+        contact = contacts_from_db[index]
+        assert contacts_from_home_page[index].all_phones_from_home_page == merge_phones_like_on_home_page(contact)
+        assert contacts_from_home_page[index].all_emails_from_home_page == merge_emails_like_on_home_page(contact)
+        index=index+1
+        return index
 
 
 def clear(s):
