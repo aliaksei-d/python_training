@@ -215,5 +215,13 @@ class ContactHelper:
         secondaryphone = re.search("P: (.*)", text).group(1)
         return Contact(homephone=homephone, workphone=workphone, mobilephone=mobilephone, secondaryphone=secondaryphone)
 
+    def add_contact_to_group(self):
+        wd = self.app.wd
+        self.open_home_page()
+        self.select_contact_by_id()
+        wd.find_element_by_name("to_group").click()
+
+
+
     def implicitly_wait(self, param):
         pass
