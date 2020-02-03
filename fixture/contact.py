@@ -86,8 +86,7 @@ class ContactHelper:
     def delete_contact_by_id(self, id):
         wd = self.app.wd
         self.open_home_page()
-        # select first contact
-        wd.find_element_by_css_selector("input[value='%s']" % id).click()
+        self.select_contact_by_id()
         self.implicitly_wait(1)
         # confirm Delete action
         # self.accept_next_alert = True
@@ -96,6 +95,17 @@ class ContactHelper:
         self.return_to_home_page()
         self.contact_cache = None
         self.implicitly_wait(2)
+
+    def select_contact_by_id(self):
+        wd = self.app.wd
+        wd.find_element_by_css_selector("input[value='%s']" % id).click()
+
+    def select_group_by_id(self):
+        wd = self.app.wd
+        wd.get("http://localhost/addressbook/index.php")
+        wd.find_element_by_name("to_group").click()
+        Select(wd.find_element_by_name("to_group")).select_by_visible_text("name5b")
+        wd.find_element_by_xpath("(//option[@value='221'])[2]").click()
 
     def modify_first_contact(self):
         wd = self.app.wd
