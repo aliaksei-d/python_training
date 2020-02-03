@@ -1,5 +1,6 @@
 from selenium.webdriver.support.select import Select
 from model.contact import Contact
+from model.group import Group
 import re
 
 class ContactHelper:
@@ -96,7 +97,7 @@ class ContactHelper:
         self.contact_cache = None
         self.implicitly_wait(2)
 
-    def select_contact_by_id(self):
+    def select_contact_by_id(self, id):
         wd = self.app.wd
         wd.find_element_by_css_selector("input[value='%s']" % id).click()
 
@@ -215,13 +216,23 @@ class ContactHelper:
         secondaryphone = re.search("P: (.*)", text).group(1)
         return Contact(homephone=homephone, workphone=workphone, mobilephone=mobilephone, secondaryphone=secondaryphone)
 
-    def add_contact_to_group(self):
+    def select_group_for_adding_contact_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_css_selector("select[name='to_group']").click()
+        wd.find_element_by_css_selector("select[name='to_group'] option[value='%s']" % id).click()
+
+    def add_contact_to_group(self, contact_id, group_id):
         wd = self.app.wd
         self.open_home_page()
-        self.select_contact_by_id()
-        wd.find_element_by_name("to_group").click()
+        self.select_contact_by_id(contact_id)
+        self.select_group_for_adding_contact_by_id(group_id)
+        wd.find_element_by_name("add").click()
+        self.open_groups_page()
 
-
+    def open_groups_page(self):
+        wd = self.app.wd
+        if not (wd.current_url.endswith("/group.php") and len(wd.find_elements_by_name("new")) > 0):
+            wd.find_element_by_link_text("groups").click()
 
     def implicitly_wait(self, param):
         pass

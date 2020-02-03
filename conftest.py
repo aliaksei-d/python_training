@@ -3,8 +3,9 @@ import json
 import os.path
 from fixture.application import Application
 import importlib
-import  jsonpickle
+import jsonpickle
 from fixture.db import DbFixture
+from fixture.orm import ORMFixture
 
 fixture = None
 target = None
@@ -40,7 +41,6 @@ def stop(request):
 @pytest.fixture
 def check_ui(request):
     return request.config.getoption("--check_ui")
-
 
 
 def pytest_addoption(parser):
