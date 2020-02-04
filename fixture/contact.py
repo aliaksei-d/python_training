@@ -229,6 +229,20 @@ class ContactHelper:
         wd.find_element_by_name("add").click()
         self.open_groups_page()
 
+    def delete_contact_from_group(self, contact_id, group_id):
+        wd = self.app.wd
+        self.open_group_page(group_id)
+        self.select_contact_by_id(contact_id)
+        wd.find_element_by_name("remove").click()
+        self.return_to_home_page()
+        self.contact_cache = None
+        self.implicitly_wait(2)
+
+    def open_group_page(self, group_id):
+        wd = self.app.wd
+        if not (wd.current_url.endswith("addressbook/index.php?group=%s" % group_id)):
+            wd.get("http://localhost/addressbook/index.php?group=%s" % group_id)
+
     def open_groups_page(self):
         wd = self.app.wd
         if not (wd.current_url.endswith("/group.php") and len(wd.find_elements_by_name("new")) > 0):
